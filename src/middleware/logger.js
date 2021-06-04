@@ -1,12 +1,15 @@
-
 const logger = ( store ) => ( next ) => ( action ) => {
     const debug = true;
 
-    const subStrings = [ 'USER', ];
+    const subStrings = [ 'USER', 'DOCUMENT' ];
     const returnValue = next( action );
     if ( ( debug ) && ( new RegExp( subStrings.join( '|' ) ).test( action.type ) ) ) {
         console.group( '(logger) action: ' + action.type );
-        console.log( 'new state: ', store.getState() );
+        const currStoreState = store.getState();
+        console.log( 'new state: ', currStoreState );
+        // console.log( 'isArray(action.docNames)', Array.isArray( action.docNames )
+        //     , 'isArray(currStoreState.docNames)', Array.isArray( currStoreState.docNames )
+        //     , 'isArray(currStoreState.docNames.docNames)', Array.isArray( currStoreState.docNames.docNames ) );
         console.groupEnd();
     }
     return returnValue;
