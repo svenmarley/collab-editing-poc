@@ -1,9 +1,10 @@
 // noinspection SpellCheckingInspection
 
-import { API } from '../utils/_DATA_';
 import { showLoading, hideLoading } from 'react-redux-loading';
 import { receiveUsersObj } from './userActions';
-import { setAuthedUserObjLogOut } from './authedUserActions';
+import { setAuthedUserObj } from './authedUserActions';
+import { gAPI } from '../components/App'
+import { receiveDocNamesObj } from './docNamesActions';
 
 //const AUTHED_ID = 'sarahedo';
 
@@ -13,35 +14,67 @@ export const GLOBALS = {
         LOGIN : 'USER_LOGIN',
         LOGOUT : 'USER_LOGOUT',
     },
+    DOCUMENTS: {
+        RECEIVE: 'DOCUMENTS_RECEIVE',
+        LOAD: 'DOCUMENT_LOAD',
+    },
+    NAV: {
+        LOGIN: 'NAV_LOGIN',
+        LOGOUT: 'NAV_LOGOUT',
+        DOC_LIST: 'NAV_DOC_LIST',
+        EDIT_CURRENT_DOC: 'NAV_EDIT_CURRENT_DOC',
+    }
+
 
 };
 
 export function handleInitialData() {
     const sFunc = 'handleInitialData()-->';
-    let debug = true;
-
-    console.log( sFunc );
+    let debug = false;
 
     return ( dispatch, /*getState*/ ) => {
         const sFunc1 = sFunc + '.dispatch()-->';
-        debug && console.log( sFunc1 + 'here' );
 
         dispatch( showLoading() );
 
-        return API.getInitialData()
-                  .then( ( { users, data } ) => {
+        return gAPI.getInitialData()
+                  .then( ( { users, data, docsInfo } ) => {
                       const sFunc2 = sFunc1 + 'getInitialData().then()-->';
                       debug && console.log( sFunc2 + 'users', users );
                       debug && console.log( sFunc2 + 'data', data );
+                      debug && console.log( sFunc2 + 'docsInfo ', docsInfo );
 
                       dispatch( receiveUsersObj( users ) );
 
-                      dispatch( setAuthedUserObjLogOut() )
-                      //dispatch( setAuthedUserObj( 'johndoe' ) );
+                      let docNames = docsInfo.conversations.map( ( di) => {
+                          return di.id;
+                      })
+                      debug && console.log( sFunc2 + 'docNames', docNames );
+                      dispatch( receiveDocNamesObj( docNames ) );
+
+                      //dispatch( setAuthedUserObjLogOut() )
+                      dispatch( setAuthedUserObj( 'alice' ) );
 
                       dispatch( hideLoading() );
                   } )
     };
 }
 
+export const myFirstDiff = ( a, b ) => {
+
+    let aIndex = 0;
+
+    while ( aIndex < a.length ) {
+
+        if ( a[aIndex] !== b[aIndex] )
+            break;
+
+        if ( aIndex === b.length )
+            aIndex = -1;
+
+        aIndex++;
+    }
+
+    return ( aIndex === a.length ? -1 : aIndex );
+};
 

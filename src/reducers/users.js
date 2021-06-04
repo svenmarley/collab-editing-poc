@@ -2,7 +2,7 @@ import { GLOBALS } from '../actions/shared';
 
 export default function users( state = {}, action ) {
     const sFunc = `reducers/users: ${action.type}-->`;
-    let debug = true;
+    let debug = false;
 
     if ( debug && ( action.type.includes( 'USER' ) ) )
         console.log( sFunc + 'state', state, 'action', action );
