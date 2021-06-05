@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ReactLogo from '../assets/logo.svg';
 import { setAuthedUserObj } from '../actions/authedUserActions';
-import Nav from './Nav';
 
 class Login extends Component {
     sFunc = 'Login';
@@ -68,7 +67,6 @@ class Login extends Component {
 
         return (
             <div className="login-main">
-                <Nav />
                 <div className="login-welcome">
                     <h5>Welcome to the <strong>Would You Rather</strong> app</h5>
                     Please sign in to continue

@@ -6,17 +6,24 @@ class Logout extends Component {
     sFunc = 'Logout';
 
     componentDidMount() {
-        this.props.dispatch( setAuthedUserObjLogOut() )
+        this.props.dispatch( setAuthedUserObjLogOut() );
+
+        this.props.history.push( `/login` );
+
     }
 
     render() {
         return (
-            <div >
+            <div>
                 Logged Out
             </div>
         );
     }
 }
 
+function mapStateToProps() {
 
-export default connect()(Logout);
+    return {};
+}
+
+export default connect( mapStateToProps )( Logout );

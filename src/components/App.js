@@ -12,6 +12,7 @@ import { API } from '../utils/_DATA_';
 import { handleInitialData, myFirstDiff } from '../actions/shared';
 import DocsList from './DocsList';
 import DocEdit from './DocEdit';
+import Nav from './Nav';
 
 const config = require( '../config' );
 
@@ -48,9 +49,10 @@ class App extends Component {
                         {this.props.loading === true
                             ? <span>loading</span>
                             : <div>
+                                <Nav />
+                                <Route path={'/'} exact component={DocsList}/>
                                 <Route path={'/login'} exact component={Login}/>
                                 <Route path={'/logout'} exact component={Logout}/>
-                                <Route path={'/'} exact component={DocsList}/>
                                 <Route path={'/docs'} exact component={DocsList}/>
                                 <Route path={'/docs/:id'} exact component={DocEdit}/>
                             </div>
@@ -65,18 +67,13 @@ class App extends Component {
 }
 
 function mapStateToProps( { users, authedUser } ) {
-    // const sFunc = 'App.js.mapStateToProps()-->';
-    // const debug = false;
+     const sFunc = 'App.js.mapStateToProps()-->';
+    const debug = false;
 
-    let bRet = true;
-    if ( typeof ( users ) !== 'undefined' ) {
-        if ( users.length !== 0 )
-            if ( authedUser )
-                bRet = false;
-    }
+    debug && console.log( sFunc + 'authedUser', authedUser, 'users', users );
 
     return {
-        loading : bRet,
+        loading : users.length === 0,
         users,
         authedUser,
     };

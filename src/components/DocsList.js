@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-//import { gAPI } from './App';
 import { connect } from 'react-redux';
 import '../assets/App.css';
-import Nav from './Nav';
 
 class DocsList extends Component {
     #sFunc = 'DocsList';
-    state = {
-        docs : [],
-    };
 
     componentDidMount() {
         const sFunc = this.#sFunc + '.componentDidMount()-->';
@@ -39,9 +34,11 @@ class DocsList extends Component {
         const debug = true;
 
         const { authedUser, docNames } = this.props;
-        debug && console.log( sFunc + 'docNames', docNames );
-        debug && console.log( sFunc + 'authedUser', authedUser );
-        console.log( sFunc + 'isArray(docNames)', Array.isArray( docNames ), 'len', ( Array.isArray( docNames ) ? docNames.length : 0 ) );
+        if ( debug ) {
+            console.log( sFunc + 'docNames', docNames );
+            console.log( sFunc + 'authedUser', authedUser );
+            console.log( sFunc + 'isArray(docNames)', Array.isArray( docNames ), 'len', ( Array.isArray( docNames ) ? docNames.length : 0 ) );
+        }
 
         return (
             <div>
@@ -50,7 +47,6 @@ class DocsList extends Component {
                     null
                     :
                     <span>
-                        <Nav/>
                         <div className="DocsList-block">
                             <h3>Click on one</h3>
                             <ul className="DocsList-ul">
