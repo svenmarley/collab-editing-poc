@@ -2,7 +2,7 @@
 
 import { showLoading, hideLoading } from 'react-redux-loading';
 import { receiveUsersObj } from './userActions';
-import { setAuthedUserObj } from './authedUserActions';
+import { setAuthedUserObjLogOut } from './authedUserActions';
 import { gAPI } from '../components/App'
 import { receiveDocNamesObj } from './docNamesActions';
 
@@ -52,8 +52,8 @@ export function handleInitialData() {
                       debug && console.log( sFunc2 + 'docNames', docNames );
                       dispatch( receiveDocNamesObj( docNames ) );
 
-                      //dispatch( setAuthedUserObjLogOut() )
-                      dispatch( setAuthedUserObj( 'alice' ) );
+                      dispatch( setAuthedUserObjLogOut() )
+                      //dispatch( setAuthedUserObj( 'alice' ) );
 
                       dispatch( hideLoading() );
                   } )
