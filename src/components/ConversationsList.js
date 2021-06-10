@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/App.css';
 
-class DocsList extends Component {
-    #sFunc = 'DocsList';
+class ConversationsList extends Component {
+    #sFunc = 'ConversationsList';
 
     componentDidMount() {
         const sFunc = this.#sFunc + '.componentDidMount()-->';
@@ -25,7 +25,7 @@ class DocsList extends Component {
 
         debug && console.log( sFunc + 'target.value', target.textContent );
 
-        this.props.history.push( `/docs/` + target.textContent );
+        this.props.history.push( `/conversations/` + target.textContent );
 
     };
 
@@ -33,26 +33,26 @@ class DocsList extends Component {
         const sFunc = this.#sFunc + '.render()-->';
         const debug = true;
 
-        const { authedUser, docNames } = this.props;
+        const { authedUser, conversationIds } = this.props;
         if ( debug ) {
-            console.log( sFunc + 'docNames', docNames );
+            console.log( sFunc + 'conversationNames', conversationIds );
             console.log( sFunc + 'authedUser', authedUser );
-            console.log( sFunc + 'isArray(docNames)', Array.isArray( docNames ), 'len', ( Array.isArray( docNames ) ? docNames.length : 0 ) );
+            console.log( sFunc + 'isArray(conversationNames)', Array.isArray( conversationIds ), 'len', ( Array.isArray( conversationIds ) ? conversationIds.length : 0 ) );
         }
 
         return (
             <div>
-                {authedUser === null || !Array.isArray( docNames )
+                {authedUser === null || !Array.isArray( conversationIds )
                     ?
                     null
                     :
                     <span>
-                        <div className="DocsList-block">
+                        <div className="ConversationList-block">
                             <h3>Click on one</h3>
-                            <ul className="DocsList-ul">
-                                {docNames.map( ( dn ) => {
+                            <ul className="ConversationsList-ul">
+                                {conversationIds.map( ( dn ) => {
                                     return (
-                                        <li className="DocsList-item"
+                                        <li className="ConversationsList-item"
                                             key={dn}
                                             onClick={this.handleClick}
                                         >
@@ -72,16 +72,16 @@ class DocsList extends Component {
 
 function mapStateToProps( {
                               authedUser,
-                              docNames,
+                              conversationIds,
                           }
     ,
 ) {
-    const sFunc = 'DocsList.js.mapStateToProps()-->';
+    const sFunc = 'ConversationsList.js.mapStateToProps()-->';
     const debug = false;
 
     const ret = {
         authedUser,
-        docNames,
+        conversationIds,
     };
 
     debug && console.log( sFunc + 'here', 'returning', ret );
@@ -89,4 +89,4 @@ function mapStateToProps( {
     return ret;
 }
 
-export default connect( mapStateToProps )( DocsList );
+export default connect( mapStateToProps )( ConversationsList );
