@@ -24,8 +24,8 @@ class Nav extends Component {
                 this.props.history.push( '/login' );
                 break;
 
-            case GLOBALS.NAV.DOC_LIST:
-                this.props.history.push( '/docs' );
+            case GLOBALS.NAV.CONVERSATION_LIST:
+                this.props.history.push( '/conversations' );
                 break;
 
             default:
@@ -52,7 +52,7 @@ class Nav extends Component {
                     <span>Hello {user.name}</span>
                 }
                 <NavLink to={'/logout'} exact activeClassName={'Nav-active'}>Logout</NavLink>
-                <NavLink to={'/docs'} exact activeClassName={'Nav-active'}>Docs List</NavLink>
+                <NavLink to={'/conversations'} exact activeClassName={'Nav-active'}>Conversations List</NavLink>
             </nav>
         );
     }
@@ -60,16 +60,16 @@ class Nav extends Component {
 
 function mapStateToProps( {
                               authedUser,
-                              docNames,
+                              conversationIds,
                               users,
                           },
 ) {
     const sFunc = 'Nav.js.mapStateToProps()-->';
-    const debug = true;
+    const debug = false;
 
     const ret = {
         authedUser,
-        docNames,
+        conversationIds,
         users,
     };
 
@@ -78,5 +78,4 @@ function mapStateToProps( {
     return ret;
 }
 
-//DocsList.propTypes = {};
 export default connect( mapStateToProps )( Nav );
