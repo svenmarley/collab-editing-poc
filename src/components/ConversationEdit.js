@@ -1,18 +1,36 @@
-import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { myFirstDiff } from '../actions/shared';
 import { gAPI } from './App';
+import { storeConversation } from '../actions/conversationActions';
 
-class DocEdit extends Component {
-    #sFunc = 'DocEdit';
-    state = {
-        value : '',
-    };
+class ConversationEdit extends Component {
+    #sFunc = 'ConversationEdit';
+
+    componentDidMount() {
+        const sFunc = this.#sFunc + '.componentDidMount()-->';
+        const debug = false;
+
+        const { params } = this.props.match;
+        const { dispatch } = this.props;
+        debug && console.log( sFunc + 'params', params );
+
+        gAPI.getConversation( params.id )
+            .then( ( conversation ) => {
+                const sFunc = this.#sFunc + '.componentDidMount().gAPI.getConversation.then()-->';
+                const debug = true;
+
+                debug && console.log( sFunc + 'conversation', conversation );
+
+                dispatch( storeConversation( params.id, conversation.text, conversation.lastMutation ) );
+            } );
+
+    }
 
     handleChange = ( e ) => {
         const sFunc = this.#sFunc + '.handleChange()-->';
-        const debug = true;
+        const debug = false;
 
         const cursorPos = e.target.selectionStart;
         debug && console.log( sFunc + 'cursorPosition', cursorPos );
@@ -20,11 +38,13 @@ class DocEdit extends Component {
         let newValue = e.target.value;
         debug && console.log( sFunc + 'newValue', newValue );
 
-        if ( newValue.length - 1 !== this.state.value.length ) {
-            // means a char was deleted
-            const i = myFirstDiff( this.state.value, newValue );
+        const { conversation } = this.props;
 
-            const delChar = this.state.value.substring( i, i + 1 );
+        if ( newValue.length - 1 !== conversation.content.length ) {
+            // means a char was deleted
+            const i = myFirstDiff( conversation.content, newValue );
+
+            const delChar = conversation.content.substring( i, i + 1 );
             console.log( sFunc + 'DEL( %d, 1 )', i, 'char to be deleted', delChar );
 
         }
@@ -33,27 +53,15 @@ class DocEdit extends Component {
             debug && console.log( sFunc + 'newChar', newChar );
             console.log( sFunc + 'INS %d:\'%s\'', cursorPos, newChar );
 
-            gAPI.sendInsert( cursorPos, 1, newChar, 1 ) //docOriginIndex )
+            gAPI.sendInsert( conversation.id, cursorPos - 1, 1, newChar, 1 )
                 .then( res => res.json() )
                 .then( ( result ) => {
                     const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
 
                     console.log( sFunc + 'result', result );
-
                 } );
 
         }
-
-        // msgServer.send( JSON.stringify( {
-        //                                     type : 'fileChange',
-        //                                     user : 'alice',
-        //                                     value : newValue,
-        //                                 } ) );
-
-        this.setState( ( state ) => ( {
-            ...state,
-            value : newValue,
-        } ) );
 
     };
 
@@ -62,7 +70,7 @@ class DocEdit extends Component {
         const debug = true;
 
         debug && console.log( sFunc + 'props', this.props );
-        const { authedUser, users } = this.props;
+        const { authedUser, users, conversation } = this.props;
 
         const user = users[authedUser] || null;
         debug && console.log( sFunc + 'user', user );
@@ -79,7 +87,7 @@ class DocEdit extends Component {
 
                         <textarea name="test"
                                   rows="10" cols="70"
-                                  value={this.state.value}
+                                  value={conversation.content}
                                   onChange={this.handleChange}
                         >
                     </textarea>
@@ -91,10 +99,10 @@ class DocEdit extends Component {
 
 }
 
-DocEdit.propTypes = {};
+ConversationEdit.propTypes = {};
 
-function mapStateToProps( { authedUser, users } ) {
-    const sFunc = 'DocsEdit.js.mapStateToProps()-->';
+function mapStateToProps( { authedUser, users, conversation } ) {
+    const sFunc = 'ConversationEdit.js.mapStateToProps()-->';
     const debug = false;
 
     debug && console.log( sFunc + 'here' );
@@ -102,9 +110,10 @@ function mapStateToProps( { authedUser, users } ) {
     return {
         authedUser,
         users,
+        conversation,
     };
 }
 
-//DocEdit.propTypes = {};
+//ConversationEdit.propTypes = {};
 
-export default connect( mapStateToProps )( DocEdit );
+export default connect( mapStateToProps )( ConversationEdit );
