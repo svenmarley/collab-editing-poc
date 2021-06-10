@@ -2,17 +2,18 @@ import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoadingBarContainer from 'react-redux-loading';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
 import Login from './Login';
 import Logout from './Logout';
 import '../assets/App.css';
 
 import { API } from '../utils/_DATA_';
-import { handleInitialData, myFirstDiff } from '../actions/shared';
-import DocsList from './DocsList';
-import DocEdit from './DocEdit';
+import { handleInitialData } from '../actions/shared';
+import ConversationsList from './ConversationsList';
+import ConversationEdit from './ConversationEdit';
 import Nav from './Nav';
+import { storeConversation } from '../actions/conversationActions';
+import { store } from '../index';
 
 const config = require( '../config' );
 
@@ -32,7 +33,6 @@ class App extends Component {
         debug && console.log( sFunc + 'props', this.props );
 
         this.props.dispatch( handleInitialData() );
-
     }
 
     render() {
@@ -49,12 +49,12 @@ class App extends Component {
                         {this.props.loading === true
                             ? <span>loading</span>
                             : <div>
-                                <Nav />
-                                <Route path={'/'} exact component={DocsList}/>
+                                <Nav/>
+                                <Route path={'/'} exact component={ConversationsList}/>
                                 <Route path={'/login'} exact component={Login}/>
                                 <Route path={'/logout'} exact component={Logout}/>
-                                <Route path={'/docs'} exact component={DocsList}/>
-                                <Route path={'/docs/:id'} exact component={DocEdit}/>
+                                <Route path={'/conversations'} exact component={ConversationsList}/>
+                                <Route path={'/conversations/:id'} exact component={ConversationEdit}/>
                             </div>
                         }
                     </div>
@@ -67,7 +67,7 @@ class App extends Component {
 }
 
 function mapStateToProps( { users, authedUser } ) {
-     const sFunc = 'App.js.mapStateToProps()-->';
+    const sFunc = 'App.js.mapStateToProps()-->';
     const debug = false;
 
     debug && console.log( sFunc + 'authedUser', authedUser, 'users', users );
@@ -84,27 +84,34 @@ function mapStateToProps( { users, authedUser } ) {
 // ******************************************************************************************************
 
 //   MESSAGE SERVER --- STUFF
+let W3CWebSocket = require( 'websocket' ).w3cwebsocket;
 
-const msgServer = new W3CWebSocket( config.msgServerPath );
+let client = new W3CWebSocket( config.msgServerPath );//, 'echo-protocol');
 
-msgServer.onopen = () => {
-    console.log( 'WebSocket Client Connected' );
+client.onerror = function( err ) {
+    const sFunc = 'client.onerror()-->';
+    console.log( sFunc + 'connection error', err );
 };
-msgServer.onmessage = ( message ) => {
-    const sFunc = 'msgServer.onmessage()-->';
-    const debug = false;
+
+client.onopen = function( connection ) {
+    console.log( 'WebSocket Client Connected on', config.msgServerPath, 'connection', connection );
+};
+
+client.onmessage = function( message ) {
+    let sFunc = 'client.onmessage()-->';
+    const debug = true;
 
     debug && console.log( sFunc + 'message', message );
 
     const m = JSON.parse( message.data );
+    console.log( sFunc + 'm', m );
+    const { id, lastMutation, content } = m;
 
-    const n = myFirstDiff( this.state.value, m.value );
-    debug && console.log( sFunc + 'state.value [%s] m[%s] n', this.state.value, m.value, n );
+    sFunc = 'app.js.client.onmessage().return()-->';
 
-    this.setState( ( state ) => ( {
-        ...state,
-        value : m.value,
-    } ) );
+    console.log( sFunc + 'dispatching  id', id, 'content', content, 'lastMutation', lastMutation );
+
+    store.dispatch( storeConversation( id, content, lastMutation ) );
 
 };
 
