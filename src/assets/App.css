@@ -37,26 +37,26 @@
     }
 }
 
-.DocsList-block {
+.ConversationsList-block {
     border: 1px solid black;
     padding: 2px 2px 2px 2px;
     margin: 0 0 0 0;
     display: inline-block;
 }
-.DocsList-ul {
+.ConversationsList-ul {
     padding: 2px 2px 2px 2px;
     margin: 0 0 0 0;
     display: inline-block;
     text-align: center;
 }
-.DocsList-item {
+.ConversationsList-item {
     list-style: none;
     border: 1px solid gray;
     cursor: pointer;
 
 }
 
-.DocsList-item:hover {
+.ConversationsList-item:hover {
     background-color: lightgreen;
 }
 
