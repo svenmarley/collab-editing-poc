@@ -3,8 +3,8 @@
 import { showLoading, hideLoading } from 'react-redux-loading';
 import { receiveUsersObj } from './userActions';
 import { setAuthedUserObjLogOut } from './authedUserActions';
-import { gAPI } from '../components/App'
-import { receiveDocNamesObj } from './docNamesActions';
+import { gAPI } from '../components/App';
+import { receiveConversationNamesObj } from './conversationIdsActions';
 
 //const AUTHED_ID = 'sarahedo';
 
@@ -14,17 +14,17 @@ export const GLOBALS = {
         LOGIN : 'USER_LOGIN',
         LOGOUT : 'USER_LOGOUT',
     },
-    DOCUMENTS: {
-        RECEIVE: 'DOCUMENTS_RECEIVE',
-        LOAD: 'DOCUMENT_LOAD',
+    CONVERSATIONS : {
+        RECEIVE : 'CONVERSATIONS_RECEIVE',
+        LOAD : 'CONVERSATIONS_LOAD',
+        UPDATE : 'CONVERSATIONS_UPDATE_CONVERSATION',
     },
-    NAV: {
-        LOGIN: 'NAV_LOGIN',
-        LOGOUT: 'NAV_LOGOUT',
-        DOC_LIST: 'NAV_DOC_LIST',
-        EDIT_CURRENT_DOC: 'NAV_EDIT_CURRENT_DOC',
-    }
-
+    NAV : {
+        LOGIN : 'NAV_LOGIN',
+        LOGOUT : 'NAV_LOGOUT',
+        CONVERSATION_LIST : 'NAV_CONVERSATION_LIST',
+        EDIT_CONVERSATION : 'NAV_EDIT_CONVERSATION',
+    },
 
 };
 
@@ -32,31 +32,31 @@ export function handleInitialData() {
     const sFunc = 'handleInitialData()-->';
     let debug = false;
 
-    return ( dispatch, /*getState*/ ) => {
+    return ( dispatch /*getState*/ ) => {
         const sFunc1 = sFunc + '.dispatch()-->';
 
         dispatch( showLoading() );
 
         return gAPI.getInitialData()
-                  .then( ( { users, data, docsInfo } ) => {
-                      const sFunc2 = sFunc1 + 'getInitialData().then()-->';
-                      debug && console.log( sFunc2 + 'users', users );
-                      debug && console.log( sFunc2 + 'data', data );
-                      debug && console.log( sFunc2 + 'docsInfo ', docsInfo );
+                   .then( ( { users, conversations } ) => {
+                       const sFunc2 = sFunc1 + 'getInitialData().then()-->';
+                       debug && console.log( sFunc2 + 'users', users );
+                       //debug && console.log( sFunc2 + 'data', data );
+                       debug && console.log( sFunc2 + 'conversations ', conversations );
 
-                      dispatch( receiveUsersObj( users ) );
+                       dispatch( receiveUsersObj( users ) );
 
-                      let docNames = docsInfo.conversations.map( ( di) => {
-                          return di.id;
-                      })
-                      debug && console.log( sFunc2 + 'docNames', docNames );
-                      dispatch( receiveDocNamesObj( docNames ) );
+                       let conversationNames = conversations.conversations.map( ( di ) => {
+                           return di.id;
+                       } );
+                       debug && console.log( sFunc2 + 'conversationIds', conversationNames );
+                       dispatch( receiveConversationNamesObj( conversationNames ) );
 
-                      dispatch( setAuthedUserObjLogOut() )
-                      //dispatch( setAuthedUserObj( 'alice' ) );
+                       dispatch( setAuthedUserObjLogOut() );
+                       //dispatch( setAuthedUserObj( 'alice' ) );
 
-                      dispatch( hideLoading() );
-                  } )
+                       dispatch( hideLoading() );
+                   } );
     };
 }
 

@@ -7,9 +7,9 @@ const logger = ( store ) => ( next ) => ( action ) => {
         console.group( '(logger) action: ' + action.type );
         const currStoreState = store.getState();
         console.log( 'new state: ', currStoreState );
-        // console.log( 'isArray(action.docNames)', Array.isArray( action.docNames )
-        //     , 'isArray(currStoreState.docNames)', Array.isArray( currStoreState.docNames )
-        //     , 'isArray(currStoreState.docNames.docNames)', Array.isArray( currStoreState.docNames.docNames ) );
+        // console.log( 'isArray(action.conversationNames)', Array.isArray( action.conversationNames )
+        //     , 'isArray(currStoreState.conversationNames)', Array.isArray( currStoreState.conversationNames )
+        //     , 'isArray(currStoreState.conversationNames.conversationNames)', Array.isArray( currStoreState.conversationNames.conversationNames ) );
         console.groupEnd();
     }
     return returnValue;
