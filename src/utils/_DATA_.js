@@ -118,7 +118,7 @@ export class API {
 
     }
 
-    getConversation( conversationName ) {
+    getConversation( conversationId ) {
         // const sFunc = this.#sFunc + '.getConversation()-->';
         // const debug = true;
 
@@ -128,7 +128,7 @@ export class API {
 
             const headers = this.#headers;
 
-            fetch( `${config.apiServerPath}/conversations/${conversationName}`, { headers } )
+            fetch( `${config.apiServerPath}/conversations/${conversationId}`, { headers } )
                 .then( res => res.json() )
                 .then( ( conversation ) => {
                     const sFunc = this.#sFunc + '.getConversation().promise().then.then()-->';
@@ -143,36 +143,80 @@ export class API {
 
     }
 
-    sendInsert( conversationId, index, length, text, originIndex ) {
+    breakOrigin( inOrigin ) {
+        const sFunc = this.#sFunc + '.breakOrigin()-->';
+        const debug = false;
 
-        return new Promise( ( res ) => {
-            const sFunc = this.#sFunc + '.sendInsert()-->';
+        let ret = inOrigin.substr( 1, inOrigin.length - 2 );
+        debug && console.log( sFunc + 'inOrigin', inOrigin, 'ret', ret );
+        let a = ret.split( ',' ).map( ( o ) => {
+            return parseInt( o.trim() );
+        } );
+        debug && console.log( sFunc + 'inOrigin', inOrigin, 'a', a );
+
+        return ( a );
+    }
+
+    buildOriginIndexStructure( inOrigin ) {
+        const sFunc = this.#sFunc + 'buildOriginIndexStructure()-->';
+        const debug = true;
+
+        let aOrigin = this.breakOrigin( inOrigin );
+
+        debug && console.log( sFunc + 'inOrigin', inOrigin, 'aOrigin', aOrigin );
+
+        let b = {
+            'alice' : 0,
+            'bob' : 0,
+        };
+        b.alice = aOrigin[0];
+        b.bob = aOrigin[1];
+
+        debug && console.log( sFunc + 'author', this.#config.author, 'returning', b );
+
+        return b;
+    }
+
+    //sendInsert( conversationId, origin, index, length, text ) {
+    send( type, conversationId, origin, index, length, text ) {
+
+        return new Promise( () => {
+            const sFunc = this.#sFunc + '.send()-->';
             const debug = true;
 
-            debug && console.log( sFunc + 'inside   res', res );
+            debug && console.log( sFunc + 'inside   type', type, 'origin', origin, 'index', index, 'length', length, 'text', text );
 
-            const body = {
+            let body = {
                 'author' : this.#config.author,
                 'conversationId' : conversationId,
-                'data' : {
+                'origin' : this.buildOriginIndexStructure( origin ),
+            };
+
+            if ( type === 'INS' ) {
+                body.data = {
                     'index' : index,
                     'length' : length,
                     'text' : text,
-                    'type' : 'INS',
-                },
-                'origin' : {
-                    [this.#config.author] : originIndex,
-                },
-            };
-            console.log( sFunc + 'body', body );
+                    'type' : 'insert',
+                };
+            }
+            else {
+                body.data = {
+                    'type' : 'delete',
+                    'index' : index,
+                    'length' : length,
+                    'text' : '',
+                };
+            }
 
+            console.log( sFunc + 'body', body );
             const requestOptions = {
                 method : 'POST',
                 headers : {
                     'Content-Type' : 'application/json',
                     'Authorization' : this.#config.author,
                 },
-                body : JSON.stringify(body),
+                body : JSON.stringify( body ),
             };
             console.log( sFunc + 'sending', requestOptions );
 

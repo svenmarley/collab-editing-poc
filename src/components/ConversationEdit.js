@@ -10,7 +10,7 @@ class ConversationEdit extends Component {
 
     componentDidMount() {
         const sFunc = this.#sFunc + '.componentDidMount()-->';
-        const debug = false;
+        const debug = true;
 
         const { params } = this.props.match;
         const { dispatch } = this.props;
@@ -23,7 +23,8 @@ class ConversationEdit extends Component {
 
                 debug && console.log( sFunc + 'conversation', conversation );
 
-                dispatch( storeConversation( params.id, conversation.text, conversation.lastMutation ) );
+                dispatch( storeConversation( params.id, conversation.content, conversation.lastMutation
+                    , conversation.origin ) );
             } );
 
     }
@@ -39,21 +40,30 @@ class ConversationEdit extends Component {
         debug && console.log( sFunc + 'newValue', newValue );
 
         const { conversation } = this.props;
+        debug && console.log( sFunc + 'conversation', conversation );
 
         if ( newValue.length - 1 !== conversation.content.length ) {
             // means a char was deleted
-            const i = myFirstDiff( conversation.content, newValue );
+            const index = myFirstDiff( conversation.content, newValue );
 
-            const delChar = conversation.content.substring( i, i + 1 );
-            console.log( sFunc + 'DEL( %d, 1 )', i, 'char to be deleted', delChar );
+            const delChar = conversation.content.substring( index, index + 1 );
+            console.log( sFunc + 'DEL( %d, 1 )', index, 'char to be deleted', delChar );
 
+            gAPI.send( 'DEL', conversation.id,  conversation.origin, index, 1, '' )
+                .then( res => res.json() )
+                .then( ( result ) => {
+                    const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
+
+                    console.log( sFunc + 'result', result );
+                } );
         }
         else {
             const newChar = newValue.substring( cursorPos - 1, cursorPos );
             debug && console.log( sFunc + 'newChar', newChar );
             console.log( sFunc + 'INS %d:\'%s\'', cursorPos, newChar );
 
-            gAPI.sendInsert( conversation.id, cursorPos - 1, 1, newChar, 1 )
+            //gAPI.sendInsert( conversation.id,  conversation.origin, cursorPos - 1, 1, newChar, 1 )
+            gAPI.send( 'INS', conversation.id,  conversation.origin, cursorPos - 1, 1, newChar )
                 .then( res => res.json() )
                 .then( ( result ) => {
                     const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
@@ -84,6 +94,7 @@ class ConversationEdit extends Component {
                     :
                     <div>
                         <h3>Welcome: {userName}</h3>
+                        <div>Origin: {conversation.origin}</div>
 
                         <textarea name="test"
                                   rows="10" cols="70"
