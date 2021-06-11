@@ -105,13 +105,13 @@ client.onmessage = function( message ) {
 
     const m = JSON.parse( message.data );
     console.log( sFunc + 'm', m );
-    const { id, lastMutation, content } = m;
+    const { id, lastMutation, content, origin } = m;
 
     sFunc = 'app.js.client.onmessage().return()-->';
 
-    console.log( sFunc + 'dispatching  id', id, 'content', content, 'lastMutation', lastMutation );
+    console.log( sFunc + 'dispatching  id', id, 'origin', origin, 'content', content, 'lastMutation', lastMutation );
 
-    store.dispatch( storeConversation( id, content, lastMutation ) );
+    store.dispatch( storeConversation( id, content, lastMutation, origin ) );
 
 };
 
