@@ -19,7 +19,7 @@ This project was boot-strapped with [Create React App](https://github.com/facebo
 This is a project I was asked to complete as a technical interview.  It was quite substantial to try to accomplish 
 in 6-8 hours.  I did not succeed at that goal.
 
-This project uses Node JS/Express as the server, and React Redux on the web.
+This project uses Node JS and Express as the server, and React Redux in the browser.
 
 Honesty about my development skills:
 * I have not been a full time developer for 10 years.
@@ -41,6 +41,8 @@ DocPeer - is a static class for dealing with groups of, or retrieving Doc's.
   - the **author** must be known from somewhere before this command is sent to the server.  So either:
     - there is another command that is sent in to the server that has the **author**, and the server retains which **author** goes with which session
     - the web browser gets the **author** from somewhere.  But where?  There is no /users request.
+  - **the /info request is supposed to return answers to 3 questions.  I have not found any questions in my 
+    specifications.**
 * No POST /login is in the specification, so I used the header Authorization to include who the author is.  This is a 
   **known**. (i.e. I don't query anything for it, I have it hardcoded in a user list)
 * on the POST /mutations
@@ -51,10 +53,16 @@ DocPeer - is a static class for dealing with groups of, or retrieving Doc's.
       knows what in it, and is used by the server
 * on GET /conversations
   - what is **lastMutation**?  Is it?
-    - origin?
+    - origin? - **using this, only returning the origin, not the mutation.  Also.  adding "origin" to the return and continuing to return the real lastMutation.**
     - this users last mutation  (alison(2,0)INS 9:'is') ?
+      - ~~**for this project I presumed it is the last Mutation with the latest origin inside the mutation (2,0)**~~
+        - I can't do this because the last mutation doesn't have the next origin calculated in it, it has the mutation origin that it came in with
     - the ultimate last users last mutation  (bob(2,5)DEL 6:2) ?
 * A single server cannot get 2 origins at the exact same time.  They always come either in 2 different paths/threads, or async.  So, I created a tblMUTATIONS that held a history, and walked that history to calculate any new mutated origin
+* Noun problems
+  - Mutation vs origin - In the doc, a mutation is the whole, last thing that was done.  Ex:  "alice (1,2)INS 11:'e'".  But, in the API definitions it is obvious that a mutation is the origin - i.e. what the current indexes are for all parties (alice and bob)
+* origin order - there is no specification for origin order.  i.e. is alice 0, and bob 1?  What happens if there are more than 2 people?
+  - **for the sake of this project I presume that alice is 0 and bob is 1 - hardcoded**
 *   
   
 
