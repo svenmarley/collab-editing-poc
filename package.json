@@ -2,6 +2,9 @@
   "name": "collab-editing-poc",
   "version": "0.1.0",
   "dependencies": {
+    "react-redux": "^7.2.4",
+    "react-redux-loading": "^4.6.1",
+    "react-router-dom": "^5.2.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -39,9 +42,6 @@
     ]
   },
   "devDependencies": {
-    "react-redux": "^7.2.4",
-    "react-redux-loading": "^4.6.1",
-    "react-router-dom": "^5.2.0"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "src/config.js",
