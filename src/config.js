@@ -1,18 +1,14 @@
-const fs = require( 'fs' );
 
-let mainHost;
-
-console.log( 'process.env', process.env );
-
-if ( typeof ( process.env.JAWSDB_MARIA_URL ) === 'undefined' ) {
-    mainHost = '127.0.0.1';
+let apiHost;
+if ( typeof( process.env.MSG_PORT ) === 'undefined' ) {
+    apiHost = '127.0.0.1';
 }
 else {
-    mainHost = 'u3r5w4ayhxzdrw87.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
+    apiHost = 'https://hidden-hollows-45703.herokuapp.com/';
 }
 
-exports.msgServerPort = process.env.PORT || 3001;
-exports.msgServerPath = process.env.ORIGIN || `ws://${mainHost}:${exports.msgServerPort}`;
+exports.msgServerPort = parseInt( process.env.MSG_PORT ) || 3001;
+exports.msgServerPath = process.env.ORIGIN || `ws://${apiHost}:${exports.msgServerPort}`;
 
-exports.apiServerPort = process.env.PORT || 3002;
-exports.apiServerPath = process.env.ORIGIN || `http://${mainHost}:${exports.apiServerPort}`;
+exports.apiServerPort = process.env.API_PORT || 3002;
+exports.apiServerPath = process.env.ORIGIN || `http://${apiHost}:${exports.apiServerPort}`;
