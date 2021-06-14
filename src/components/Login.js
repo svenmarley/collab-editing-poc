@@ -68,7 +68,7 @@ class Login extends Component {
         return (
             <div className="login-main">
                 <div className="login-welcome">
-                    <h5>Welcome to the <strong>Would You Rather</strong> app</h5>
+                    <h5>Welcome to the <strong>Collaborative Editing Proof-of-Concept</strong> app</h5>
                     Please sign in to continue
                 </div>
                 <div>
