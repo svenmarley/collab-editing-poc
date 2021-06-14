@@ -50,6 +50,7 @@ class App extends Component {
                             ? <span>loading</span>
                             : <div>
                                 <Nav/>
+                                <div>{config.msgServerPath}</div>
                                 <Route path={'/'} exact component={ConversationsList}/>
                                 <Route path={'/login'} exact component={Login}/>
                                 <Route path={'/logout'} exact component={Logout}/>
