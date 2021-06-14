@@ -51,6 +51,7 @@ DocPeer - is a static class for dealing with groups of, or retrieving Doc's.
   - Why does any client need to know a different users **origin**?
     - I would think the origin (user1origin, user2origin, ...) could just be an encrypted key that no one 
       knows what in it, and is used by the server
+   - added returning the new origin on the return   
 * on GET /conversations
   - what is **lastMutation**?  Is it?
     - origin? - **using this, only returning the origin, not the mutation.  Also.  adding "origin" to the return and continuing to return the real lastMutation.**
