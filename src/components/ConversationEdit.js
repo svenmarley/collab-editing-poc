@@ -7,6 +7,9 @@ import { storeConversation } from '../actions/conversationActions';
 
 class ConversationEdit extends Component {
     #sFunc = 'ConversationEdit';
+    state = {
+        cursorPosition : 0,
+    };
 
     componentDidMount() {
         const sFunc = this.#sFunc + '.componentDidMount()-->';
@@ -36,6 +39,15 @@ class ConversationEdit extends Component {
         const cursorPos = e.target.selectionStart;
         debug && console.log( sFunc + 'cursorPosition', cursorPos );
 
+        this.setState( { cursorPos }, () => {
+            const sFunc = '.setState().then()-->';
+            console.log( sFunc + 'this.$textarea.value', this.$textarea.value, 'cursorPos', cursorPos );
+            if ( this.$textarea.value != null ) {
+                console.log( sFunc, 'applying' );
+                this.$textarea.selectionStart = cursorPos;
+            }
+        } );
+
         let newValue = e.target.value;
         debug && console.log( sFunc + 'newValue', newValue );
 
@@ -49,7 +61,7 @@ class ConversationEdit extends Component {
             const delChar = conversation.content.substring( index, index + 1 );
             console.log( sFunc + 'DEL( %d, 1 )', index, 'char to be deleted', delChar );
 
-            gAPI.send( 'DEL', conversation.id,  conversation.origin, index, 1, '' )
+            gAPI.send( 'DEL', conversation.id, conversation.origin, index, 1, '' )
                 .then( res => res.json() )
                 .then( ( result ) => {
                     const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
@@ -63,7 +75,7 @@ class ConversationEdit extends Component {
             console.log( sFunc + 'INS %d:\'%s\'', cursorPos, newChar );
 
             //gAPI.sendInsert( conversation.id,  conversation.origin, cursorPos - 1, 1, newChar, 1 )
-            gAPI.send( 'INS', conversation.id,  conversation.origin, cursorPos - 1, 1, newChar )
+            gAPI.send( 'INS', conversation.id, conversation.origin, cursorPos - 1, 1, newChar )
                 .then( res => res.json() )
                 .then( ( result ) => {
                     const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
@@ -74,6 +86,17 @@ class ConversationEdit extends Component {
         }
 
     };
+
+    handleFocus = (e) => {
+        const sFunc = 'handleFocus()-->';
+        const debug = true;
+
+        if ( this.$textarea.value != null ) {
+            console.log( sFunc, 'applying' );
+            this.$textarea.selectionStart = 2;
+        }
+
+    }
 
     render() {
         const sFunc = this.#sFunc + '.render()-->';
@@ -95,11 +118,15 @@ class ConversationEdit extends Component {
                     <div>
                         <h3>Welcome: {userName}</h3>
                         <div>Origin: {conversation.origin}</div>
+                        <div>Last Mutation: {conversation.lastMutation}</div>
 
                         <textarea name="test"
+                                  ref={node => ( this.$textarea = node )}
                                   rows="10" cols="70"
+                                  id="theTextAreaIWant"
                                   value={conversation.content}
                                   onChange={this.handleChange}
+                                  onFocus={this.handleFocus}
                         >
                     </textarea>
                     </div>
