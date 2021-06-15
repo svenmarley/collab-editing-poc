@@ -30,6 +30,8 @@ class App extends Component {
         const sFunc = this.#sFunc + '.componentDidMount()-->';
         const debug = false;
 
+        console.log( 'url', window.location.href );
+
         debug && console.log( sFunc + 'props', this.props );
 
         this.props.dispatch( handleInitialData() );
