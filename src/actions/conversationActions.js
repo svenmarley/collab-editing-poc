@@ -6,6 +6,9 @@ export function storeConversation( conversationId, content, lastMutation, origin
 
     debug && console.log( sFunc + 'docId', conversationId, 'content', content, 'lastMutation', lastMutation, 'origin', origin )
 
+    if ( content === null )
+        content = '';
+
     return {
         type: GLOBALS.CONVERSATIONS.UPDATE,
         conversation : {

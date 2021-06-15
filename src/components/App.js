@@ -53,7 +53,8 @@ class App extends Component {
                             ? <span>loading</span>
                             : <div>
                                 <Nav/>
-                                <div>{config.msgServerPath}</div>
+                                <div>API Server Path: {config.apiServerPath}</div>
+                                <div>Web Server Path: {config.msgServerPath}</div>
                                 <Route path={'/'} exact component={ConversationsList}/>
                                 <Route path={'/login'} exact component={Login}/>
                                 <Route path={'/logout'} exact component={Logout}/>
@@ -94,15 +95,15 @@ let client = new W3CWebSocket( config.msgServerPath );//, 'echo-protocol');
 
 client.onerror = function( err ) {
     const sFunc = 'client.onerror()-->';
-    console.log( sFunc + 'connection error', err );
+    console.log( sFunc + 'ERROR: WebSocket: connection error', err );
 };
 
 client.onopen = function( connection ) {
-    console.log( 'WebSocket Client Connected on', config.msgServerPath, 'connection', connection );
+    console.log( 'WebSocket: Client Connected on', config.msgServerPath, 'connection', connection );
 };
 
 client.onmessage = function( message ) {
-    let sFunc = 'client.onmessage()-->';
+    let sFunc = 'WebSocket: client.onmessage()-->';
     const debug = true;
 
     debug && console.log( sFunc + 'message', message );
@@ -111,9 +112,9 @@ client.onmessage = function( message ) {
     console.log( sFunc + 'm', m );
     const { id, lastMutation, content, origin } = m;
 
-    sFunc = 'app.js.client.onmessage().return()-->';
+    sFunc = 'WebSocket: app.js.client.onmessage().return()-->';
 
-    console.log( sFunc + 'dispatching  id', id, 'origin', origin, 'content', content, 'lastMutation', lastMutation );
+    console.log( sFunc + 'WebSocket: dispatching  id', id, 'origin', origin, 'content', content, 'lastMutation', lastMutation );
 
     store.dispatch( storeConversation( id, content, lastMutation, origin ) );
 

@@ -1,24 +1,34 @@
-
 console.log( 'url', window.location.href );
 global.serverUrl = window.location.href;
 
-let apiHost;
 if ( global.serverUrl.includes( 'localhost' ) ) {
-    apiHost = '127.0.0.1';
-    exports.msgServerPort = 3001;
-    exports.msgServerPath = `ws://${apiHost}:${exports.msgServerPort}`;
+    const apiHost = '127.0.0.1/';
 
-    exports.apiServerPort = 3002;
+    exports.webPort = 3000; //process.env.UI_PORT || 3000;
+    exports.apiServerPort = exports.webPort + 2;
+    exports.msgServerPort = exports.webPort + 1;
+
+    exports.webURL = `http://${apiHost}:${exports.webPort}`;
+    exports.msgServerPath = `ws:${apiHost}:${exports.msgServerPort}`;
     exports.apiServerPath = `http://${apiHost}:${exports.apiServerPort}`;
+    exports.apiServerPathRaw = `http://${apiHost}`;
 }
 else {
-    apiHost = 'floating-hamlet-81896.herokuapp.com';
+    // apiHost = 'floating-hamlet-81896.herokuapp.com';   // heroku
 
-    exports.msgServerPort = 3002;
-    exports.msgServerPath = process.env.ORIGIN || `ws://${apiHost}:${exports.msgServerPort}`;
+    const apiHost = '52.14.91.154';       // amazon
+    exports.webURL = 'https://hidden-hollows-45703.herokuapp.com';
 
-    exports.apiServerPort = process.env.API_PORT || 3002;
-    exports.apiServerPath = process.env.ORIGIN || `http://${apiHost}:${exports.apiServerPort}`;
+    exports.webPort = 3000;
+    exports.apiServerPort = exports.webPort + 2;
+    exports.msgServerPort = exports.webPort + 1;
 
+
+    exports.msgServerPath = `ws:${apiHost}:${exports.msgServerPort}`;
+    exports.apiServerPath = `http://${apiHost}:${exports.apiServerPort}`;
+    exports.apiServerPathRaw = `http://${apiHost}`;
 }
+
+
+
 
