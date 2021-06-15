@@ -1,5 +1,6 @@
 
 let apiHost;
+console.log( 'typeof( process.env.MSG_PORT )', typeof( process.env.MSG_PORT ) );
 if ( typeof( process.env.MSG_PORT ) === 'undefined' ) {
     apiHost = '127.0.0.1';
 }
