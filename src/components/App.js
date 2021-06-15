@@ -15,7 +15,10 @@ import Nav from './Nav';
 import { storeConversation } from '../actions/conversationActions';
 import { store } from '../index';
 
+console.log( 'url', window.location.href );
+
 const config = require( '../config' );
+
 
 export let gAPI = new API();
 gAPI.setConfig( config.apiServerPath, null );
@@ -30,7 +33,6 @@ class App extends Component {
         const sFunc = this.#sFunc + '.componentDidMount()-->';
         const debug = false;
 
-        console.log( 'url', window.location.href );
 
         debug && console.log( sFunc + 'props', this.props );
 
