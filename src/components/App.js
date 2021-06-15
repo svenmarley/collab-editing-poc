@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoadingBarContainer from 'react-redux-loading';
 
+
 import Login from './Login';
 import Logout from './Logout';
 import '../assets/App.css';
@@ -14,8 +15,6 @@ import ConversationEdit from './ConversationEdit';
 import Nav from './Nav';
 import { storeConversation } from '../actions/conversationActions';
 import { store } from '../index';
-
-console.log( 'url', window.location.href );
 
 const config = require( '../config' );
 
