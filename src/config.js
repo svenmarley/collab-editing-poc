@@ -14,7 +14,7 @@ if ( global.serverUrl.includes( 'localhost' ) ) {
 else {
     apiHost = 'floating-hamlet-81896.herokuapp.com';
 
-    exports.msgServerPort = ;
+    exports.msgServerPort = 3002;
     exports.msgServerPath = process.env.ORIGIN || `ws://${apiHost}:${exports.msgServerPort}`;
 
     exports.apiServerPort = process.env.API_PORT || 3002;
