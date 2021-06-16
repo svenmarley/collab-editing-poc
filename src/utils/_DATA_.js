@@ -82,23 +82,23 @@ export class API {
                       } );
     }
 
-    getInfo() {
-        const sFunc = 'API::getInfo()-->';
-        const debug = true;
-
-        debug && console.log( sFunc + 'here' );
-
-        return new Promise( ( res ) => {
-            const headers = this.#headers;
-
-            fetch( `${config.apiServerPath}/info`, { headers } )
-                .then( res => res.json() )
-                .then( ( data ) => {
-                    debug && console.log( sFunc + 'got data', data );
-                    res( data );
-                } );
-        } );
-    };
+    // getInfo() {
+    //     const sFunc = 'API::getInfo()-->';
+    //     const debug = true;
+    //
+    //     debug && console.log( sFunc + 'here' );
+    //
+    //     return new Promise( ( res ) => {
+    //         const headers = this.#headers;
+    //
+    //         fetch( `${config.apiServerPath}/info`, { headers } )
+    //             .then( res => res.json() )
+    //             .then( ( data ) => {
+    //                 debug && console.log( sFunc + 'got data', data );
+    //                 res( data );
+    //             } );
+    //     } );
+    // };
 
     getConversations() {
         const sFunc = 'API::getConversations()-->';
@@ -177,11 +177,10 @@ export class API {
         return b;
     }
 
-    //sendInsert( conversationId, origin, index, length, text ) {
-    send( type, conversationId, origin, index, length, text ) {
+    sendMutation( type, conversationId, origin, index, length, text ) {
 
         return new Promise( () => {
-            const sFunc = this.#sFunc + '.send()-->';
+            const sFunc = this.#sFunc + '.sendMutation()-->';
             const debug = true;
 
             debug && console.log( sFunc + 'inside   type', type, 'origin', origin, 'index', index, 'length', length, 'text', text );
@@ -231,6 +230,69 @@ export class API {
         } );
     }
 
+    sendAddConversation() {
+
+        return new Promise( ( respond ) => {
+            let sFunc = this.#sFunc + '.sendAddConversation()-->';
+            const debug = true;
+
+            debug && console.log( sFunc + 'inside' );
+
+            const requestOptions = {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : this.#config.author,
+                },
+            };
+
+            // creating a new doc
+            fetch( this.#config.apiServerUrl + '/conversations', requestOptions )
+                .then( res => res.json() )
+                .then( ( results ) => {
+                    sFunc += '.POST /conversations-->';
+
+                    console.log( sFunc + 'results', results );
+
+                    const newDocID = results.ID;
+
+                    respond( { ID : newDocID } );
+                } );
+
+        } );
+    }
+
+    sendDeleteConversation( conversationId ) {
+
+        return new Promise( ( respond ) => {
+            let sFunc = this.#sFunc + '.sendDeleteConversation()-->';
+            const debug = true;
+
+            debug && console.log( sFunc + 'conversationId', conversationId );
+
+            const requestOptions = {
+                method : 'DELETE',
+                headers : {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : this.#config.author,
+                },
+            };
+
+            // delete a doc
+            const url = this.#config.apiServerUrl + '/conversations/' + conversationId;
+            debug && console.log( sFunc + 'url', url );
+            fetch( url, requestOptions )
+                .then( ( results ) => {
+                    sFunc += '.DELETE /conversations-->';
+
+                    console.log( sFunc + 'results', results );
+
+                    const newDocID = results.ID;
+
+                    respond( { ID : newDocID } );
+                } );
+        } );
+    }
 }
 
 export { users };
