@@ -74,3 +74,18 @@
 .Nav-active {
     background-color: aqua;
 }
+.login-main {
+    border: 2px solid lightgray;
+    width: 50%;
+    display: inline-block;
+}
+
+.login-welcome {
+    background-color: lightgray;
+    display: flow-root;
+    padding: 0 0 10px 0;
+}
+
+.login-reactLogo {
+    width: 200px;
+}
