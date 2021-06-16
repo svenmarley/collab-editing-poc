@@ -61,7 +61,7 @@ class ConversationEdit extends Component {
             const delChar = conversation.content.substring( index, index + 1 );
             console.log( sFunc + 'DEL( %d, 1 )', index, 'char to be deleted', delChar );
 
-            gAPI.send( 'DEL', conversation.id, conversation.origin, index, 1, '' )
+            gAPI.sendMutation( 'DEL', conversation.id, conversation.origin, index, 1, '' )
                 .then( res => res.json() )
                 .then( ( result ) => {
                     const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
@@ -75,7 +75,7 @@ class ConversationEdit extends Component {
             console.log( sFunc + 'INS %d:\'%s\'', cursorPos, newChar );
 
             //gAPI.sendInsert( conversation.id,  conversation.origin, cursorPos - 1, 1, newChar, 1 )
-            gAPI.send( 'INS', conversation.id, conversation.origin, cursorPos - 1, 1, newChar )
+            gAPI.sendMutation( 'INS', conversation.id, conversation.origin, cursorPos - 1, 1, newChar )
                 .then( res => res.json() )
                 .then( ( result ) => {
                     const sFunc = this.#sFunc + '.handleChange().sendInsert().then.then()-->';
@@ -87,7 +87,7 @@ class ConversationEdit extends Component {
 
     };
 
-    handleFocus = (e) => {
+    handleFocus = () => {
         const sFunc = 'handleFocus()-->';
         //const debug = true;
 
@@ -117,6 +117,7 @@ class ConversationEdit extends Component {
                     :
                     <div>
                         <h3>Welcome: {userName}</h3>
+                        <div>Editing Conversation: {conversation.id}</div>
                         <div>Origin: {conversation.origin}</div>
                         <div>Last Mutation: {conversation.lastMutation}</div>
 
