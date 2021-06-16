@@ -5,7 +5,7 @@ included:
 * API and WebSocket Server
   - document management
   - handling mutations
-  - deleting and creating a document  
+  - deleting and creating a document  (didn't complete this)
     
 * Web Application
   - Login as different users
@@ -17,15 +17,15 @@ included:
 This project was boot-strapped with [Create React App](https://github.com/facebook/create-react-app).
 
 This is a project I was asked to complete as a technical interview.  It was quite substantial to try to accomplish 
-in 6-8 hours.  I did not succeed at that goal.
+in 6-8 hours.  I did not succeed at that goal.  I probably spent more like 30-40 hours on it.
 
-This project uses Node JS and Express as the server, and React Redux in the browser.
+This project uses Node JS and Express as the server, and React Redux for the browser.
 
-Honesty about my development skills:
+###Honesty about my development skills:
 * I have not been a full time developer for 10 years.
 * My last full time development position was in PHP and MVC frameworks.
 * I have written 1 other React application for a class I am taking.  I am a newbie.
-* I have written 1 other "production" code for a project I was working on for google.  I am a newbie.
+* I have written 1 other "production" NodeJS project I was working on for google.  I am a newbie.
 
 
 

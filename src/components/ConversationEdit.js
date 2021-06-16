@@ -89,7 +89,7 @@ class ConversationEdit extends Component {
 
     handleFocus = (e) => {
         const sFunc = 'handleFocus()-->';
-        const debug = true;
+        //const debug = true;
 
         if ( this.$textarea.value != null ) {
             console.log( sFunc, 'applying' );
