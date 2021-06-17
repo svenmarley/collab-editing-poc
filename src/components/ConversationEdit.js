@@ -39,13 +39,9 @@ class ConversationEdit extends Component {
         const cursorPos = e.target.selectionStart;
         debug && console.log( sFunc + 'cursorPosition', cursorPos );
 
-        this.setState( { cursorPos }, () => {
+        this.setState( { cursorPosition : cursorPos }, () => {
             const sFunc = '.setState().then()-->';
-            console.log( sFunc + 'this.$textarea.value', this.$textarea.value, 'cursorPos', cursorPos );
-            if ( this.$textarea.value != null ) {
-                console.log( sFunc, 'applying' );
-                this.$textarea.selectionStart = cursorPos;
-            }
+            debug && console.log( sFunc + 'cursor pos set', this.state.cursorPosition );
         } );
 
         let newValue = e.target.value;
@@ -87,15 +83,17 @@ class ConversationEdit extends Component {
 
     };
 
-    handleFocus = () => {
-        const sFunc = 'handleFocus()-->';
-        //const debug = true;
+    componentDidUpdate( prevProps, prevState, snapshot ) {
+        const sFunc = 'componentDidUpdate()-->';
+        const debug = true;
 
-        if ( this.$textarea.value != null ) {
-            console.log( sFunc, 'applying' );
-            this.$textarea.selectionStart = 2;
-        }
+        const e = document.getElementById( 'theTextAreaIWant' );
 
+        debug && console.log( sFunc + 'this.state.cursorPosition', this.state.cursorPosition, 'e.selectionStart', e.selectionStart );
+
+        debug && console.log( sFunc + 'e', e );
+
+        e.setSelectionRange( this.state.cursorPosition, this.state.cursorPosition );
     }
 
     render() {
@@ -122,12 +120,10 @@ class ConversationEdit extends Component {
                         <div>Last Mutation: {conversation.lastMutation}</div>
 
                         <textarea name="test"
-                                  ref={node => ( this.$textarea = node )}
                                   rows="10" cols="70"
                                   id="theTextAreaIWant"
                                   value={conversation.content}
                                   onChange={this.handleChange}
-                                  onFocus={this.handleFocus}
                         >
                     </textarea>
                     </div>
