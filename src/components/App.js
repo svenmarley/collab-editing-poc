@@ -116,7 +116,7 @@ client.onmessage = function( message ) {
 
     console.log( sFunc + 'WebSocket: dispatching  id', id, 'origin', origin, 'content', content, 'lastMutation', lastMutation );
 
-    store.dispatch( storeConversation( id, content, lastMutation, origin ) );
+    store.dispatch( storeConversation( id, content, lastMutation, origin ) )
 
 };
 
